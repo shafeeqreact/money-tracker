@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const uri = 'mongodb+srv://admin:admin@money-tracker-cluster-aqf8c.mongodb.net/test?retryWrites=true&w=majority';
+const uri = process.env.MONGO_URL;
 
 const connectDB = async (task) => {
     try {
