@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllTransactions, getOneTransaction, insertOneTransaction, deleteOneTransaction } = require('../db/connectDB');
+const {
+    getAllTransactions,
+    getOneTransaction,
+    insertOneTransaction,
+    deleteOneTransaction,
+    updateOneTransaction
+} = require('../db/connectDB');
 
 router.route('/')
     .get(async (req, res) => {
@@ -30,8 +36,13 @@ router.route('/:id')
             res.status(400).send({ success: false, error: err });
         }
     })
-    .put((req, res) => {
-        res.status(200).send('From the put with id income router')
+    .put(async (req, res) => {
+        try {
+            const resp = await updateOneTransaction(req.params.id, req.body);
+            res.status(200).send(resp);
+        } catch (err) {
+            res.status(400).send({ success: false, error: err });
+        }
     })
     .delete(async (req, res) => {
         try {
