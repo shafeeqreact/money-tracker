@@ -8,7 +8,8 @@ const Input = ({ label = '', fieldName = '', value = 0, setValue, type = 'text',
             </div>
             {editable
                 ?
-                <input onChange={e => setValue(fieldName, e.target.value)} value={value} type={type} className="form-control text-right" aria-describedby={fieldName} />
+                <input onChange={e => setValue(fieldName, e.target.value)} value={value} 
+                    type={type} className="form-control text-right" aria-describedby={fieldName} />
                 :
                 <span className="form-control text-right">{value}</span>
             }
