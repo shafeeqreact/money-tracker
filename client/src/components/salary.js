@@ -8,10 +8,11 @@ const Salary = () => {
     useEffect(() => {
         const callAPI = async () => {
             const resp = await axios.get('/api/income')
+            console.log(resp.data.data)
             setSalary(resp.data.data)
         }
         callAPI();
-    })
+    }, [])
 
     return (
         <CSSTransition

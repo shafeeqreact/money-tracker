@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import Navbar from './components/navbar';
 import Home from './components/home';
@@ -17,6 +17,7 @@ function App(props) {
           <Route path="/home"><Home /></Route>
           <Route path="/view-salary"><Salary /></Route>
           <Route path="/add-salary"><AddSalary /></Route>
+          <Redirect to="/home" />
         </Switch>
       </div>
     </BrowserRouter>
