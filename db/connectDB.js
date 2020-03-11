@@ -88,6 +88,7 @@ const insertOneTransaction = async (cdata) => {
 
 const deleteOneTransaction = async (id) => {
     try {
+        console.log(id)
         const task = async (collection) => await collection.deleteOne({ _id: ObjectId(id) });
         const resp = await connectDB(task);
         if (resp && resp.code !== 200)

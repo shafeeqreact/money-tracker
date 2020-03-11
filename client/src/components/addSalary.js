@@ -6,62 +6,62 @@ import Input from '../common/input';
 const AddSalary = () => {
     const [salary, setSalary] = useState({});
 
-    useEffect(()=>{
-        const salary={};
-        salary.date='99/99/9999';
-        salary.basic=0;
-        salary.hra=0;
-        salary.conveyanceReimbursement=0;
-        salary.adhoc=0;
-        salary.transportAllowance=0;
-        salary.ltaTaxable=0;
-        salary.medicalTaxable=0;
-        salary.odcBonus=0;
-        salary.providentFund=0;
-        salary.professionalTax=0;
-        salary.welfareFund=0;
-        salary.totalEarnings=0;
-        salary.totalDeductions=0;
-        salary.netPay=0;
+    useEffect(() => {
+        const salary = {};
+        salary.date = '9999-99-99';
+        salary.basic = 0;
+        salary.hra = 0;
+        salary.conveyanceReimbursement = 0;
+        salary.adhoc = 0;
+        salary.transportAllowance = 0;
+        salary.ltaTaxable = 0;
+        salary.medicalTaxable = 0;
+        salary.odcBonus = 0;
+        salary.providentFund = 0;
+        salary.professionalTax = 0;
+        salary.welfareFund = 0;
+        salary.totalEarnings = 0;
+        salary.totalDeductions = 0;
+        salary.netPay = 0;
 
         setSalary(salary);
-    },[])
+    }, [])
 
-    const handleDateChange = (fieldName, value) => setSalary({...salary, [fieldName]:value});
+    const handleDateChange = (fieldName, value) => setSalary({ ...salary, [fieldName]: value });
 
     const handleChange = (fieldName, value) => {
-        const newSalary = {...salary, [fieldName]:parseFloat(parseFloat(value).toFixed(2))}
-        
-        const {basic,hra,conveyanceReimbursement,adhoc,transportAllowance,ltaTaxable,medicalTaxable,odcBonus,
-            providentFund,professionalTax,welfareFund}=newSalary;
-        
-        const totalEarnings = basic+hra+conveyanceReimbursement+adhoc+transportAllowance+ltaTaxable+medicalTaxable+odcBonus;
-        const totalDeductions = providentFund+professionalTax+welfareFund;
-        const netPay = totalEarnings-totalDeductions;
+        const newSalary = { ...salary, [fieldName]: parseFloat(parseFloat(value).toFixed(2)) }
+
+        const { basic, hra, conveyanceReimbursement, adhoc, transportAllowance, ltaTaxable, medicalTaxable, odcBonus,
+            providentFund, professionalTax, welfareFund } = newSalary;
+
+        const totalEarnings = basic + hra + conveyanceReimbursement + adhoc + transportAllowance + ltaTaxable + medicalTaxable + odcBonus;
+        const totalDeductions = providentFund + professionalTax + welfareFund;
+        const netPay = totalEarnings - totalDeductions;
 
         const calculatedSalary = {
-            ...newSalary, 
-            totalEarnings: parseFloat(parseFloat(totalEarnings).toFixed(2)), 
-            totalDeductions:parseFloat(parseFloat(totalDeductions).toFixed(2)), 
-            netPay:parseFloat(parseFloat(netPay).toFixed(2))
+            ...newSalary,
+            totalEarnings: parseFloat(parseFloat(totalEarnings).toFixed(2)),
+            totalDeductions: parseFloat(parseFloat(totalDeductions).toFixed(2)),
+            netPay: parseFloat(parseFloat(netPay).toFixed(2))
         }
-        
+
         setSalary(calculatedSalary);
     }
 
     const handleClick = async () => {
-        const {date,basic,hra,conveyanceReimbursement,adhoc,transportAllowance,ltaTaxable,medicalTaxable,odcBonus,
-            providentFund,professionalTax,welfareFund,totalEarnings,totalDeductions,netPay}=salary;
-            
+        const { date, basic, hra, conveyanceReimbursement, adhoc, transportAllowance, ltaTaxable, medicalTaxable, odcBonus,
+            providentFund, professionalTax, welfareFund, totalEarnings, totalDeductions, netPay } = salary;
+
         const document = {
             date,
-            earnings: {basic,hra,conveyanceReimbursement,adhoc,transportAllowance,ltaTaxable,medicalTaxable,odcBonus},
-            deductions: {providentFund,professionalTax,welfareFund},
+            earnings: { basic, hra, conveyanceReimbursement, adhoc, transportAllowance, ltaTaxable, medicalTaxable, odcBonus },
+            deductions: { providentFund, professionalTax, welfareFund },
             totalEarnings,
             totalDeductions,
             netPay
         }
-            
+
         const resp = await axios.post('/api/income', document)
         console.log(resp)
     }

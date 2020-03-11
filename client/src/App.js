@@ -5,6 +5,7 @@ import Navbar from './components/navbar';
 import Home from './components/home';
 import Salary from './components/salary';
 import AddSalary from './components/addSalary';
+import EditSalary from './components/editSalary';
 
 import './App.css';
 
@@ -15,8 +16,9 @@ function App(props) {
       <div className="container">
         <Switch>
           <Route path="/home"><Home /></Route>
-          <Route path="/view-salary"><Salary /></Route>
+          <Route path="/view-salary" render={(props) => <Salary {...props} />} />
           <Route path="/add-salary"><AddSalary /></Route>
+          <Route path="/edit-salary/:id" render={(props) => <EditSalary {...props} />} />
           <Redirect to="/home" />
         </Switch>
       </div>

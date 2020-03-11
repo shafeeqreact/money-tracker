@@ -46,6 +46,7 @@ router.route('/:id')
     })
     .delete(async (req, res) => {
         try {
+            console.log(req.params)
             const resp = await deleteOneTransaction(req.params.id);
             res.status(200).send(resp);
         } catch (err) {

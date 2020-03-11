@@ -32,6 +32,11 @@
   transition: opacity 300ms, transform 300ms;
 }
 
+/* Clickable Pointer */
+.clickable {
+  cursor: pointer;
+}
+
 /* To remove arrows/spinners from input - Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
