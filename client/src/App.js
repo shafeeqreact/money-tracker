@@ -4,8 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Home from './components/home';
 import Salary from './components/salary';
-import AddSalary from './components/addSalary';
-import EditSalary from './components/editSalary';
+import SalaryForm from './components/salaryForm';
 
 import './App.css';
 
@@ -15,10 +14,10 @@ function App(props) {
       <Navbar />
       <div className="container">
         <Switch>
-          <Route path="/home"><Home /></Route>
+          <Route path="/home" render={(props) => <Home {...props} />} />
           <Route path="/view-salary" render={(props) => <Salary {...props} />} />
-          <Route path="/add-salary"><AddSalary /></Route>
-          <Route path="/edit-salary/:id" render={(props) => <EditSalary {...props} />} />
+          <Route path="/add-salary"render={(props) => <SalaryForm {...props} />} />
+          <Route path="/edit-salary/:id" render={(props) => <SalaryForm {...props} />} />
           <Redirect to="/home" />
         </Switch>
       </div>
