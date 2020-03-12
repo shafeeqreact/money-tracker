@@ -1,7 +1,6 @@
 import React from 'react';
 
-const TableRow = ({ data, label, header = false, trailer = false, length, tableHeader = false, children }) => {
-    // console.log(children.props.children[0].props)
+const TableRow = ({ data=[], label="", header = false, trailer = false, length, tableHeader = false, children }) => {
     if (tableHeader)
         return (
             <tr>
