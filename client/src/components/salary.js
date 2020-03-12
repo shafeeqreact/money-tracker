@@ -24,7 +24,7 @@ const Salary = (props) => {
         console.log(resp.data.data)
         setSalary(resp.data.data)
     }
-
+    console.log(salary.map(mon => mon.date))
     return (
         <CSSTransition
             in={salary.length ? true : false}
@@ -33,84 +33,44 @@ const Salary = (props) => {
         >
             <table className="table table-bordered mt-4">
                 <thead>
-                    <tr>
+                    <TableRow data={salary.map(mon => mon.date)} tableHeader >
+                        <div className="d-flex justify-content-around">
+                            {/* <FontAwesomeIcon onClick={() => props.history.push(`/edit-salary/${mon._id}`)} icon={faEdit} className="clickable" color="blue" />{"  "}
+                            <FontAwesomeIcon onClick={() => handleDelete(mon._id)} icon={faTrashAlt} className="clickable" color="red" /> */}
+                            <FontAwesomeIcon icon={faEdit} className="clickable" color="blue" />
+                            <FontAwesomeIcon icon={faTrashAlt} className="clickable" color="red" />
+                        </div>
+                    </TableRow>
+                    {/* <tr>
                         <th className="p-1" scope="col"></th>
                         {salary.map(mon =>
                             <th className="p-1 text-center" scope="col" key={mon._id}>
-                                <FontAwesomeIcon onClick={() => props.history.push(`/edit-salary/${mon._id}`)} icon={faEdit} className="clickable" color="blue" />{"  "}
-                                <FontAwesomeIcon onClick={() => handleDelete(mon._id)} icon={faTrashAlt} className="clickable" color="red" />
-                                <br />
+                                <div className="d-flex justify-content-around">
+                                    <FontAwesomeIcon onClick={() => props.history.push(`/edit-salary/${mon._id}`)} icon={faEdit} className="clickable" color="blue" />{"  "}
+                                    <FontAwesomeIcon onClick={() => handleDelete(mon._id)} icon={faTrashAlt} className="clickable" color="red" />
+                                </div>
                                 {mon.date}
                             </th>)}
-                    </tr>
+                    </tr> */}
                 </thead>
                 <tbody>
-                    <tr>
-                        <th className="py-0 px-1 text-center" scope="row" colSpan={salary.length + 1}>E A R N I N G S</th>
-                    </tr>
-                    <TableRow data={salary} label="Basic" />
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Basic</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.basic}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">HRA</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.hra}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Convynce Reimbmnt</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.conveyanceReimbursement}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Adhoc</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.adhoc}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Transport Allowance</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.transportAllowance}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">LTA Taxable</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.ltaTaxable}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Medical Taxable</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.medicalTaxable}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">ODC Bonus</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.earnings.odcBonus}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">TOTAL EARNINGS</th>
-                        {salary.map(mon => <th className="py-0 px-1 text-right" key={mon._id} >{mon.totalEarnings}</th>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1 text-center" scope="row" colSpan={salary.length + 1}>D E D U C T I O N S</th>
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Provident Fund</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.deductions.providentFund}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Professional Tax</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.deductions.professionalTax}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">Welfare Fund</th>
-                        {salary.map(mon => <td className="py-0 px-1 text-right" key={mon._id} >{mon.deductions.welfareFund}</td>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">TOTAL DEDUCTIONS</th>
-                        {salary.map(mon => <th className="py-0 px-1 text-right" key={mon._id} >{mon.totalDeductions}</th>)}
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1 text-center" scope="row" colSpan={salary.length + 1}>N E T - P A Y</th>
-                    </tr>
-                    <tr>
-                        <th className="py-0 px-1" scope="row">NET EARNINGS</th>
-                        {salary.map(mon => <th className="py-0 px-1 text-right" key={mon._id} >{mon.netPay}</th>)}
-                    </tr>
+                    <TableRow label="E A R N I N G S" length={salary.length} header />
+                    <TableRow data={salary.map(mon => mon.earnings.basic)} label="Basic" />
+                    <TableRow data={salary.map(mon => mon.earnings.hra)} label="HRA" />
+                    <TableRow data={salary.map(mon => mon.earnings.conveyanceReimbursement)} label="Conveyance Reimbrsmt" />
+                    <TableRow data={salary.map(mon => mon.earnings.adhoc)} label="Adhoc" />
+                    <TableRow data={salary.map(mon => mon.earnings.transportAllowance)} label="Transport Allowance" />
+                    <TableRow data={salary.map(mon => mon.earnings.ltaTaxable)} label="LTA Taxable" />
+                    <TableRow data={salary.map(mon => mon.earnings.medicalTaxable)} label="Medical Taxable" />
+                    <TableRow data={salary.map(mon => mon.earnings.odcBonus)} label="ODC Bonus" />
+                    <TableRow data={salary.map(mon => mon.totalEarnings)} label="TOTAL EARNINGS" trailer />
+                    <TableRow label="D E D U C T I O N S" length={salary.length} header />
+                    <TableRow data={salary.map(mon => mon.deductions.providentFund)} label="Provident Fund" />
+                    <TableRow data={salary.map(mon => mon.deductions.professionalTax)} label="Professional Tax" />
+                    <TableRow data={salary.map(mon => mon.deductions.welfareFund)} label="Welfare Fund" />
+                    <TableRow data={salary.map(mon => mon.totalDeductions)} label="TOTAL DEDUCTIONS" trailer />
+                    <TableRow label="N E T - P A Y" length={salary.length} header />
+                    <TableRow data={salary.map(mon => mon.netPay)} label="NET EARNINGS" trailer />
                 </tbody>
             </table>
         </CSSTransition>
