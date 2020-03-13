@@ -7,30 +7,43 @@ const SalaryForm = (props) => {
     const [salary, setSalary] = useState({});
 
     useEffect(() => {
-        if(props.match.params.id){
+        const salary = {};
+        if (props.match.params.id) {
             const apiCall = async () => {
                 const resp = await axios.get(`/api/income/${props.match.params.id}`);
                 console.log(resp)
                 const currentSalary = resp.data.data;
-                setSalary(currentSalary);
+                salary.date = currentSalary.date;
+                salary.basic = currentSalary.earnings.basic;
+                salary.hra = currentSalary.earnings.hra;
+                salary.conveyanceReimbursement = currentSalary.earnings.conveyanceReimbursement;
+                salary.adhoc = currentSalary.earnings.adhoc;
+                salary.transportAllowance = currentSalary.earnings.transportAllowance;
+                salary.ltaTaxable = currentSalary.earnings.ltaTaxable;
+                salary.medicalTaxable = currentSalary.earnings.medicalTaxable;
+                salary.odcBonus = currentSalary.earnings.odcBonus;
+                salary.providentFund = currentSalary.deductions.providentFund;
+                salary.professionalTax = currentSalary.deductions.professionalTax;
+                salary.welfareFund = currentSalary.deductions.welfareFund;
+                salary.totalEarnings = currentSalary.totalEarnings;
+                salary.totalDeductions = currentSalary.totalDeductions;
+                salary.netPay = currentSalary.netPay;
+                setSalary(salary);
             }
             apiCall();
-        }else{
-            const salary = {};
+        } else {
             salary.date = '9999-99-99';
-            salary.earnings={};
-            salary.earnings.basic = 0;
-            salary.earnings.hra = 0;
-            salary.earnings.conveyanceReimbursement = 0;
-            salary.earnings.adhoc = 0;
-            salary.earnings.transportAllowance = 0;
-            salary.earnings.ltaTaxable = 0;
-            salary.earnings.medicalTaxable = 0;
-            salary.earnings.odcBonus = 0;
-            salary.deductions={};
-            salary.deductions.providentFund = 0;
-            salary.deductions.professionalTax = 0;
-            salary.deductions.welfareFund = 0;
+            salary.basic = 0;
+            salary.hra = 0;
+            salary.conveyanceReimbursement = 0;
+            salary.adhoc = 0;
+            salary.transportAllowance = 0;
+            salary.ltaTaxable = 0;
+            salary.medicalTaxable = 0;
+            salary.odcBonus = 0;
+            salary.providentFund = 0;
+            salary.professionalTax = 0;
+            salary.welfareFund = 0;
             salary.totalEarnings = 0;
             salary.totalDeductions = 0;
             salary.netPay = 0;
@@ -41,6 +54,7 @@ const SalaryForm = (props) => {
     const handleDateChange = (fieldName, value) => setSalary({ ...salary, [fieldName]: value });
 
     const handleChange = (fieldName, value) => {
+        console.log(fieldName, value)
         const newSalary = { ...salary, [fieldName]: parseFloat(parseFloat(value).toFixed(2)) }
 
         const { basic, hra, conveyanceReimbursement, adhoc, transportAllowance, ltaTaxable, medicalTaxable, odcBonus,
@@ -73,8 +87,8 @@ const SalaryForm = (props) => {
             netPay
         }
 
-        if(props.match.params.id){
-            const resp = await axios.put(`/api/income/${props.match.params.id}`,document);
+        if (props.match.params.id) {
+            const resp = await axios.put(`/api/income/${props.match.params.id}`, document);
             console.log(resp)
         } else {
             const resp = await axios.post('/api/income', document)
@@ -82,27 +96,27 @@ const SalaryForm = (props) => {
         }
     }
     console.log(salary)
-    if(!salary.date)
+    if (!salary.date)
         return null;
 
     return (
         <div className="mt-4 d-flex justify-content-between" >
             <div className="mx-2">
                 <h5>Earnings</h5>
-                <Input label="Basic" fieldName="basic" value={salary.earnings.basic?salary.earnings.basic:0} setValue={handleChange} type="number" />
-                <Input label="HRA" fieldName="hra" value={salary.earnings.hra?salary.earnings.hra:0} setValue={handleChange} type="number" />
-                <Input label="Connveyance" fieldName="conveyanceReimbursement" value={salary.earnings.conveyanceReimbursement?salary.earnings.conveyanceReimbursement:0} setValue={handleChange} type="number" />
-                <Input label="Adhoc" fieldName="adhoc" value={salary.earnings.adhoc?salary.earnings.adhoc:0} setValue={handleChange} type="number" />
-                <Input label="Transport Allowance" fieldName="transportAllowance" value={salary.earnings.transportAllowance?salary.earnings.transportAllowance:0} setValue={handleChange} type="number" />
-                <Input label="LTA Taxable" fieldName="ltaTaxable" value={salary.earnings.ltaTaxable?salary.earnings.ltaTaxable:0} setValue={handleChange} type="number" />
-                <Input label="Medical Taxable" fieldName="medicalTaxable" value={salary.earnings.medicalTaxable?salary.earnings.medicalTaxable:0} setValue={handleChange} type="number" />
-                <Input label="ODC Bonus" fieldName="odcBonus" value={salary.earnings.odcBonus?salary.earnings.odcBonus:0} setValue={handleChange} type="number" />
+                <Input label="Basic" fieldName="basic" value={salary.basic ? salary.basic : 0} setValue={handleChange} type="number" />
+                <Input label="HRA" fieldName="hra" value={salary.hra ? salary.hra : 0} setValue={handleChange} type="number" />
+                <Input label="Connveyance" fieldName="conveyanceReimbursement" value={salary.conveyanceReimbursement ? salary.conveyanceReimbursement : 0} setValue={handleChange} type="number" />
+                <Input label="Adhoc" fieldName="adhoc" value={salary.adhoc ? salary.adhoc : 0} setValue={handleChange} type="number" />
+                <Input label="Transport Allowance" fieldName="transportAllowance" value={salary.transportAllowance ? salary.transportAllowance : 0} setValue={handleChange} type="number" />
+                <Input label="LTA Taxable" fieldName="ltaTaxable" value={salary.ltaTaxable ? salary.ltaTaxable : 0} setValue={handleChange} type="number" />
+                <Input label="Medical Taxable" fieldName="medicalTaxable" value={salary.medicalTaxable ? salary.medicalTaxable : 0} setValue={handleChange} type="number" />
+                <Input label="ODC Bonus" fieldName="odcBonus" value={salary.odcBonus ? salary.odcBonus : 0} setValue={handleChange} type="number" />
             </div>
             <div className="mx-2">
                 <h5>Deductions</h5>
-                <Input label="Provident Fund" fieldName="providentFund" value={salary.deductions.providentFund?salary.deductions.providentFund:0} setValue={handleChange} type="number" />
-                <Input label="Professional Tax" fieldName="professionalTax" value={salary.deductions.professionalTax?salary.deductions.professionalTax:0} setValue={handleChange} type="number" />
-                <Input label="Welfare Fund" fieldName="welfareFund" value={salary.deductions.welfareFund?salary.deductions.welfareFund:0} setValue={handleChange} type="number" />
+                <Input label="Provident Fund" fieldName="providentFund" value={salary.providentFund ? salary.providentFund : 0} setValue={handleChange} type="number" />
+                <Input label="Professional Tax" fieldName="professionalTax" value={salary.professionalTax ? salary.professionalTax : 0} setValue={handleChange} type="number" />
+                <Input label="Welfare Fund" fieldName="welfareFund" value={salary.welfareFund ? salary.welfareFund : 0} setValue={handleChange} type="number" />
             </div>
             <div className="mx-2">
                 <h5>Salary</h5>
