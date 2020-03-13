@@ -79,6 +79,7 @@ const SalaryForm = (props) => {
             providentFund, professionalTax, welfareFund, totalEarnings, totalDeductions, netPay } = salary;
 
         const document = {
+            // date: new Date(date),
             date,
             earnings: { basic, hra, conveyanceReimbursement, adhoc, transportAllowance, ltaTaxable, medicalTaxable, odcBonus },
             deductions: { providentFund, professionalTax, welfareFund },
@@ -90,14 +91,16 @@ const SalaryForm = (props) => {
         if (props.match.params.id) {
             const resp = await axios.put(`/api/income/${props.match.params.id}`, document);
             console.log(resp)
+            props.history.push('/view-salary');
         } else {
             const resp = await axios.post('/api/income', document)
             console.log(resp)
+            props.history.push('/view-salary');
         }
     }
     console.log(salary)
-    if (!salary.date)
-        return null;
+    // if (!salary.date)
+    //     return null;
 
     return (
         <div className="mt-4 d-flex justify-content-between" >
