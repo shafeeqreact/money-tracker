@@ -4,12 +4,7 @@ const TableRow = ({ data=[], label="", header = false, trailer = false, length, 
     if (tableHeader)
         return (
             <tr>
-                <th className="p-1" scope="col"></th>
-                {data.map((item, key) =>
-                    <th className="p-1 text-center" scope="col" key={key}>
-                        {children}
-                        {item}
-                    </th>)}
+                <th className="py-0 px-1 text-center" scope="row" colSpan={length + 1}><h3>{label}</h3></th>
             </tr>
         );
 
