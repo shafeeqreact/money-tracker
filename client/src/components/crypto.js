@@ -12,18 +12,19 @@ const Crypto = (props) => {
         const apiCall = async () => {
             const resp = await axios.get('/api/investment/crypto');
             console.log(resp)
-            const trans = resp.data.data.sort((a, b) => new Date(a.date) - new Date(b.date))
+            const trans = resp.data.sort((a, b) => new Date(a.date) - new Date(b.date))
             setTrans(trans);
         }
         apiCall();
     }, [])
 
     const handleDelete = async (id) => {
-        const resp1 = await axios.delete(`/api/investment/crypto'${id}`);
+        const resp1 = await axios.delete(`/api/investment/crypto/${id}`);
         console.log(resp1)
         const resp = await axios.get('/api/investment/crypto')
-        console.log(resp.data.data)
-        setTrans(resp.data.data)
+        console.log(resp)
+        const trans = resp.data.sort((a, b) => new Date(a.date) - new Date(b.date))
+        setTrans(trans);
     }
 
     return (
@@ -64,7 +65,7 @@ const Crypto = (props) => {
                     )}
                 </tbody>
             </table>
-            <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}  >Add Investment</button>
+            <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Investment</button>
         </Fragment>
     );
 }

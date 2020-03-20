@@ -11,7 +11,7 @@ const CryptoForm = (props) => {
             const apiCall = async () => {
                 const resp = await axios.get(`/api/investment/crypto/${props.match.params.id}`);
                 console.log(resp)
-                setTran(resp.data.data);
+                setTran(resp.data);
             }
             apiCall();
         } else {
@@ -46,7 +46,7 @@ const CryptoForm = (props) => {
         if (props.match.params.id) {
             const resp = await axios.put(`/api/investment/crypto/${props.match.params.id}`, document);
             console.log(resp)
-            props.history.push('/investments/cryto');
+            props.history.push('/investments/crypto');
         } else {
             const resp = await axios.post('/api/investment/crypto', document)
             console.log(resp)

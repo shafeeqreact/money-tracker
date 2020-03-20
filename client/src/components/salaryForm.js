@@ -12,7 +12,7 @@ const SalaryForm = (props) => {
             const apiCall = async () => {
                 const resp = await axios.get(`/api/income/salary/${props.match.params.id}`);
                 console.log(resp)
-                const currentSalary = resp.data.data;
+                const currentSalary = resp.data;
                 salary.date = currentSalary.date;
                 salary.basic = currentSalary.earnings.basic;
                 salary.hra = currentSalary.earnings.hra;

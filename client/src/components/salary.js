@@ -17,7 +17,7 @@ const Salary = (props) => {
         const callAPI = async () => {
             const resp = await axios.get('/api/income/salary')
             console.log('resp - ', resp)
-            const sortedSalary = resp.data.data.sort((a, b) => new Date(a.date) - new Date(b.date))
+            const sortedSalary = resp.data.sort((a, b) => new Date(a.date) - new Date(b.date))
             setSalary(sortedSalary)
         }
         callAPI();
@@ -27,8 +27,8 @@ const Salary = (props) => {
         const resp1 = await axios.delete(`/api/income/salary/${id}`);
         console.log(resp1)
         const resp = await axios.get('/api/income/salary')
-        console.log(resp.data.data)
-        setSalary(resp.data.data)
+        console.log(resp.data)
+        setSalary(resp.data)
     }
 
     console.log(salary)

@@ -6,11 +6,9 @@ const getAllTransactions = async () => {
     try {
         const task = async (collection) => await collection.find().toArray();
         const resp = await connectDB('income', 'salary', task);
-        if (resp && (resp.code !== 200 || resp.data.length === 0))
-            return { code: 404, error: 'data not found' }
-        return { code: 200, data: resp.data };
+        return resp;
     } catch (err) {
-        return { code: 400, error: err };
+        return { success: false, error: err };
     }
 }
 
@@ -18,17 +16,15 @@ const getOneTransaction = async (id) => {
     try {
         const task = async (collection) => await collection.findOne({ _id: ObjectId(id) });
         const resp = await connectDB('income', 'salary', task);
-        if (resp && resp.code !== 200)
-            return { code: 404, error: 'data not found' }
-        return { code: 200, data: resp.data };
+        return resp;
     } catch (err) {
-        return { code: 400, error: err };
+        return { success: false, error: err };
     }
 }
 
 const insertOneTransaction = async (cdata) => {
     const document = {
-        date: cdata.date ? cdata.date : "99-99-9999",
+        date: cdata.date ? cdata.date : "9999-99-99",
         earnings: {
             basic: cdata.earnings.basic ? cdata.earnings.basic : 0,
             hra: cdata.earnings.hra ? cdata.earnings.hra : 0,
@@ -54,11 +50,9 @@ const insertOneTransaction = async (cdata) => {
     try {
         const task = async (collection) => await collection.insertOne(document);
         const resp = await connectDB('income', 'salary', task);
-        if (resp && resp.code !== 200)
-            return { code: 400, error: 'bad request' }
-        return { code: 201, data: resp.data };
+        return resp;
     } catch (err) {
-        return { code: 400, error: err };
+        return { success: false, error: err };
     }
 }
 
@@ -67,11 +61,9 @@ const deleteOneTransaction = async (id) => {
         console.log(id)
         const task = async (collection) => await collection.deleteOne({ _id: ObjectId(id) });
         const resp = await connectDB('income', 'salary', task);
-        if (resp && resp.code !== 200)
-            return { code: 404, error: 'data not found' };
-        return { code: 200, data: resp.data };
+        return resp;
     } catch (err) {
-        return { code: 400, error: err };
+        return { success: false, error: err };
     }
 }
 
@@ -80,8 +72,8 @@ const updateOneTransaction = async (id, cdata) => {
         const query = { _id: ObjectId(id) };
         const task = async (collection) => await collection.findOne(query);
         const resp = await connectDB('income', 'salary', task);
-        if (resp && resp.code !== 200)
-            return { success: false, error: resp };
+        if (!resp.success)
+            return { success: false, error: resp.error };
         try {
             const document = {
                 $set: {
@@ -108,10 +100,8 @@ const updateOneTransaction = async (id, cdata) => {
                 }
             };
             const task = async (collection) => await collection.updateOne(query, document);
-            const data = await connectDB('income', 'salary', task);
-            if (data && data.code !== 200)
-                return { success: false, error: data }
-            return { success: true, data: data };
+            const resp1 = await connectDB('income', 'salary', task);
+            return resp1;
         } catch (err) {
             return { success: false, error: err };
         }
