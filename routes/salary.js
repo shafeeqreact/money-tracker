@@ -7,7 +7,7 @@ const {
     insertOneTransaction,
     deleteOneTransaction,
     updateOneTransaction
-} = require('../db/connectDB');
+} = require('../db/salary');
 
 router.route('/')
     .get(async (req, res) => {

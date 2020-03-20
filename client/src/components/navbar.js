@@ -14,10 +14,10 @@ const Navbar = () => {
                         <NavLink to="/home" className="nav-link">Home <span className="sr-only">(current)</span></NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to="/view-salary" className="nav-link">View Salary</NavLink>
+                        <NavLink to="/income/salary" className="nav-link">Salary</NavLink>
                     </li>
                     <li className="nav-item">
-                        <NavLink to="/add-salary" className="nav-link">Add Salary</NavLink>
+                        <NavLink to="/investments/crypto" className="nav-link">Investments</NavLink>
                     </li>
                 </ul>
                 <span className="navbar-text">Personal Money Tracker App</span>

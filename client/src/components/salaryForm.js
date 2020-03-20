@@ -10,7 +10,7 @@ const SalaryForm = (props) => {
         const salary = {};
         if (props.match.params.id) {
             const apiCall = async () => {
-                const resp = await axios.get(`/api/income/${props.match.params.id}`);
+                const resp = await axios.get(`/api/income/salary/${props.match.params.id}`);
                 console.log(resp)
                 const currentSalary = resp.data.data;
                 salary.date = currentSalary.date;
@@ -89,13 +89,13 @@ const SalaryForm = (props) => {
         }
 
         if (props.match.params.id) {
-            const resp = await axios.put(`/api/income/${props.match.params.id}`, document);
+            const resp = await axios.put(`/api/income/salary/${props.match.params.id}`, document);
             console.log(resp)
-            props.history.push('/view-salary');
+            props.history.push('/income/salary');
         } else {
-            const resp = await axios.post('/api/income', document)
+            const resp = await axios.post('/api/income/salary', document)
             console.log(resp)
-            props.history.push('/view-salary');
+            props.history.push('/income/salary');
         }
     }
     console.log(salary)
@@ -103,7 +103,7 @@ const SalaryForm = (props) => {
     //     return null;
 
     return (
-        <div className="mt-4 d-flex justify-content-between" >
+        <div className="d-flex justify-content-between" >
             <div className="mx-2">
                 <h5>Earnings</h5>
                 <Input label="Basic" fieldName="basic" value={salary.basic ? salary.basic : 0} setValue={handleChange} type="number" />
@@ -129,8 +129,8 @@ const SalaryForm = (props) => {
                 <Input label="Earnings" fieldName="totalEarnings" value={salary.totalEarnings} type="number" editable={false} />
                 <Input label="Deductions" fieldName="totalDeductions" value={salary.totalDeductions} type="number" editable={false} />
                 <Input label="Net Pay" fieldName="netPay" value={salary.netPay} type="number" editable={false} />
-                <div className="my-4" />
-                <button onClick={handleSubmit} type="button" className="btn btn-primary">Submit</button>
+                <button onClick={() => props.history.push('/income/salary')} type="button" className="btn btn-warning m-4">Back</button>
+                <button onClick={handleSubmit} type="button" className="btn btn-primary m-4">Submit</button>
             </div>
         </div>
     );
