@@ -1,19 +1,20 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-
+import Holdings from './holdings';
+import Returns from './returns';
+import CoinTable from './coinTable';
 
 const Crypto = (props) => {
-    const [trans, setTrans] = useState([]);
+    const [data, setData] = useState([]);
+    // const [trans, setTrans] = useState([]);
+    const [showZeroes, setShowZeroes] = useState(false);
 
     useEffect(() => {
         const apiCall = async () => {
             const resp = await axios.get('/api/investment/crypto');
-            console.log(resp)
-            const trans = resp.data.sort((a, b) => new Date(a.date) - new Date(b.date))
-            setTrans(trans);
+            console.log('crypto resp.data - ', resp.data)
+            setData(resp.data.sort((a, b) => b.amount - a.amount))
         }
         apiCall();
     }, [])
@@ -23,49 +24,53 @@ const Crypto = (props) => {
         console.log(resp1)
         const resp = await axios.get('/api/investment/crypto')
         console.log(resp)
-        const trans = resp.data.sort((a, b) => new Date(a.date) - new Date(b.date))
-        setTrans(trans);
+        setData(resp.data);
     }
+
+    let trans = data;
+    if (!showZeroes) {
+        trans = data.filter(coin => coin.quantity !== 0);
+    }
+    console.log('crypto trans - ', trans)
+    // setTrans(trans);
+
+    if (trans.length === 0)
+        return (
+            <div>
+                <h5 className="text-center"> No Transactions...</h5>
+                <div className="d-flex justify-content-between" >
+                    <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Transaction</button>
+                    <button className="btn btn-primary" onClick={() => setShowZeroes(!showZeroes)}>{showZeroes ? 'Hide Zeroes' : 'Show Zeroes'}</button>
+                </div>
+            </div>
+        )
+
+    const headersOnly = trans.map(tran => {
+        return {
+            coin: tran.coin,
+            name: tran.name,
+            exchange: tran.exchange,
+            quantity: tran.quantity,
+            amount: tran.amount,
+            fee: tran.fee,
+            totalAmount: tran.totalAmount,
+            avgRate: tran.avgRate
+        }
+    });
 
     return (
         <Fragment>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col" colSpan="13" className="align-middle text-center">B I T C O I N</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th className="py-0 align-middle text-left" scope="col">Date</th>
-                        <th className="py-0 align-middle text-left" scope="col">Type</th>
-                        <th className="py-0 align-middle text-right" scope="col">Quantity</th>
-                        <th className="py-0 align-middle text-right" scope="col">Rate</th>
-                        <th className="py-0 align-middle text-right" scope="col">Amount</th>
-                        <th className="py-0 align-middle text-right" scope="col">Fee</th>
-                        <th className="py-0 align-middle text-right" scope="col">Total</th>
-                        <th className="py-0 align-middle text-center" scope="col">Edit / Delete</th>
-                    </tr>
-                    {trans.map(tran =>
-                        <tr key={tran._id} >
-                            <td className="py-0 align-middle text-left">{tran.date}</td>
-                            <td className="py-0 align-middle text-left">{tran.type}</td>
-                            <td className="py-0 align-middle text-right">{tran.quantity.toFixed(8)}</td>
-                            <td className="py-0 align-middle text-right">{tran.rate.toFixed(8)}</td>
-                            <td className="py-0 align-middle text-right">{tran.amount.toFixed(2)}</td>
-                            <td className="py-0 align-middle text-right">{tran.fee.toFixed(2)}</td>
-                            <td className="py-0 align-middle text-right">{tran.totalAmount.toFixed(2)}</td>
-                            <td className="py-0 align-middle text-right">
-                                <div className="d-flex justify-content-around">
-                                    <FontAwesomeIcon onClick={() => props.history.push(`/investments/crypto/${tran._id}`)} icon={faEdit} className="clickable" />
-                                    <FontAwesomeIcon onClick={() => handleDelete(tran._id)} icon={faTrashAlt} className="clickable" />
-                                </div>
-                            </td>
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-            <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Investment</button>
+            <div className="d-flex justify-content-between" >
+                <Holdings trans={headersOnly} />
+                <Returns trans={headersOnly} />
+            </div>
+            <div>
+                <div className="d-flex justify-content-between" >
+                    <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Transaction</button>
+                    <button className="btn btn-primary" onClick={() => setShowZeroes(!showZeroes)}>{showZeroes ? 'Hide Zeroes' : 'Show Zeroes'}</button>
+                </div>
+                {trans.map(coin => <CoinTable key={coin.coin} coin={coin} handleDelete={handleDelete} {...props} />)}
+            </div>
         </Fragment>
     );
 }

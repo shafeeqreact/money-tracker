@@ -2,20 +2,20 @@ const { ObjectId } = require('mongodb');
 
 const { connectDB } = require('./connectDB');
 
-const getAllTransactions = async () => {
+const getAllHistoryTransactions = async () => {
     try {
         const task = async (collection) => await collection.find().toArray();
-        const resp = await connectDB('investment', 'transactions', task);
+        const resp = await connectDB('investment', 'history', task);
         return resp;
     } catch (err) {
         return { success: false, error: err };
     }
 }
 
-const getAllTransWithQuery = async (query) => {
+const getAllHistoryTransWithQuery = async (query) => {
     try {
         const task = async (collection) => await collection.find(query).toArray();
-        const resp = await connectDB('investment', 'transactions', task);
+        const resp = await connectDB('investment', 'history', task);
         return resp;
     } catch (err) {
         return { success: false, error: err };
@@ -25,7 +25,7 @@ const getAllTransWithQuery = async (query) => {
 const getOneTransaction = async (id) => {
     try {
         const task = async (collection) => await collection.findOne({ _id: ObjectId(id) });
-        const resp = await connectDB('investment', 'transactions', task);
+        const resp = await connectDB('investment', 'history', task);
         return resp;
     } catch (err) {
         return { success: false, error: err };
@@ -34,40 +34,40 @@ const getOneTransaction = async (id) => {
 
 const insertOneTransaction = async (cdata) => {
     const document = {
-        date: cdata.date ? cdata.date : new Date(),
+        date: cdata.date ? cdata.date : "",
         coin: cdata.coin ? cdata.coin : "",
         name: cdata.name ? cdata.name : "",
-        exchange: cdata.exchange ? cdata.exchange : "",
-        type: cdata.type ? cdata.type : "",
+        open: cdata.open ? cdata.open : 0,
+        high: cdata.high ? cdata.high : 0,
+        low: cdata.low ? cdata.low : 0,
+        close: cdata.close ? cdata.close : 0,
         quantity: cdata.quantity ? cdata.quantity : 0,
-        rate: cdata.rate ? cdata.rate : 0,
-        amount: cdata.amount ? cdata.amount : 0,
-        fee: cdata.fee ? cdata.fee : 0,
-        totalAmount: cdata.totalAmount ? cdata.totalAmount : 0,
-        toDateQuantity: cdata.toDateQuantity ? cdata.toDateQuantity : 0,
-        toDateRate: cdata.toDateRate ? cdata.toDateRate : 0,
-        toDateAmount: cdata.toDateAmount ? cdata.toDateAmount : 0,
-        toDateFee: cdata.toDateFee ? cdata.toDateFee : 0,
-        toDateTotalAmount: cdata.toDateTotalAmount ? cdata.toDateTotalAmount : 0,
         createdAt: new Date(),
         lastUpdatedAt: new Date()
     }
 
     try {
         const task = async (collection) => await collection.insertOne(document);
-        const resp = await connectDB('investment', 'transactions', task);
+        const resp = await connectDB('investment', 'history', task);
         return resp;
     } catch (err) {
         return { success: false, error: err };
     }
 }
 
-const insertManyTransaction = async (cdata) => {
+const insertManyHistoryTransactions = async (cdata) => {
     try {
+        console.log('db/history.js inserManyHistoryTransactions cdata[0] - ', cdata[0])
         const task = async (collection) => await collection.insertMany(cdata);
-        const resp = await connectDB('investment', 'transactions', task);
-        return resp;
+        try {
+            const resp = await connectDB('investment', 'history', task);
+            return { success: true, data: resp.data };
+        } catch (err) {
+            console.log('db/history.js insertManyHistoryTransactions error-1 err - ', err)
+            return { success: false, error: err };
+        }
     } catch (err) {
+        console.log('db/history.js insertManyHistoryTransactions error-2 err - ', err)
         return { success: false, error: err };
     }
 }
@@ -76,7 +76,7 @@ const deleteOneTransaction = async (id) => {
     try {
         console.log(id)
         const task = async (collection) => await collection.deleteOne({ _id: ObjectId(id) });
-        const resp = await connectDB('investment', 'transactions', task);
+        const resp = await connectDB('investment', 'history', task);
         return resp;
     } catch (err) {
         return { success: false, error: err };
@@ -87,7 +87,7 @@ const updateOneTransaction = async (id, cdata) => {
     try {
         const query = { _id: ObjectId(id) };
         const task = async (collection) => await collection.findOne(query);
-        const resp = await connectDB('investment', 'transactions', task);
+        const resp = await connectDB('investment', 'history', task);
         if (!resp.success)
             return { success: false, error: resp };
         try {
@@ -96,23 +96,16 @@ const updateOneTransaction = async (id, cdata) => {
                     date: cdata.date ? cdata.date : resp.data.date,
                     coin: cdata.coin ? cdata.coin : resp.data.coin,
                     name: cdata.name ? cdata.name : resp.data.name,
-                    exchange: cdata.exchange ? cdata.exchange : resp.data.exchange,
-                    type: cdata.type ? cdata.type : resp.data.type,
+                    open: cdata.open ? cdata.open : resp.data.open,
+                    high: cdata.high ? cdata.high : resp.data.high,
+                    low: cdata.low ? cdata.low : resp.data.low,
+                    close: cdata.close ? cdata.close : resp.data.close,
                     quantity: cdata.quantity ? cdata.quantity : resp.data.quantity,
-                    rate: cdata.rate ? cdata.rate : resp.data.rate,
-                    amount: cdata.amount ? cdata.amount : resp.data.amount,
-                    fee: cdata.fee ? cdata.fee : resp.data.fee,
-                    totalAmount: cdata.totalAmount ? cdata.totalAmount : resp.data.totalAmount,
-                    toDateQuantity: cdata.toDateQuantity ? cdata.toDateQuantity : resp.data.toDateQuantity,
-                    toDateRate: cdata.toDateRate ? cdata.toDateRate : resp.data.toDateRate,
-                    toDateAmount: cdata.toDateAmount ? cdata.toDateAmount : resp.data.toDateAmount,
-                    toDateFee: cdata.toDateFee ? cdata.toDateFee : resp.data.toDateFee,
-                    toDateTotalAmount: cdata.toDateTotalAmount ? cdata.toDateTotalAmount : resp.data.toDateTotalAmount,
                     lastUpdatedAt: new Date()
                 }
             };
             const task = async (collection) => await collection.updateOne(query, document);
-            const resp1 = await connectDB('investment', 'transactions', task);
+            const resp1 = await connectDB('investment', 'history', task);
             return resp1;
         } catch (err) {
             return { success: false, error: err };
@@ -123,11 +116,11 @@ const updateOneTransaction = async (id, cdata) => {
 }
 
 module.exports = {
-    getAllTransactions,
-    getAllTransWithQuery,
+    getAllHistoryTransactions,
+    getAllHistoryTransWithQuery,
     getOneTransaction,
     insertOneTransaction,
-    insertManyTransaction,
+    insertManyHistoryTransactions,
     deleteOneTransaction,
     updateOneTransaction
 };

@@ -5,8 +5,14 @@ const PORT = process.env.PORT || 8080;
 const express = require('express');
 const app = express();
 
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+
+//schedulers
+require('./schedulers');
 
 const salary = require('./routes/salary');
 const crypto = require('./routes/crypto');

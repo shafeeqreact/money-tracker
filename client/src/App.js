@@ -10,7 +10,7 @@ import CryptoForm from './components/cryptoForm';
 
 import './App.css';
 
-function App(props) {
+function App() {
   return (
     <BrowserRouter>
       <Navbar />
