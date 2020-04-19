@@ -83,7 +83,7 @@ export const processData = async (data) => {
     totalInvestment = Math.round((totalInvestment + Number.EPSILON) * 100) / 100;
 
     // calculate 'totalCurrentValue' holdings
-    let totalCurrentValue = holdings.reduce((accum, coin) => coin.quantity == 0 ? accum : accum += coin.currentValue, 0)
+    let totalCurrentValue = holdings.reduce((accum, coin) => coin.quantity === 0 ? accum : accum += coin.currentValue, 0)
     totalCurrentValue = Math.round((totalCurrentValue + Number.EPSILON) * 100) / 100;
 
     // calculate 'totalProfit' holdings

@@ -23,6 +23,8 @@ export const fetchCryptoFailure = (error) => {
     }
 }
 
+let interval;
+
 export const fetchCrypto = () => {
     return async (dispatch) => {
         dispatch(fetchCryptoRequest());
@@ -38,9 +40,9 @@ export const fetchCrypto = () => {
                     // console.log('/redux/crypto/actions calculatedData - ', calculatedData)
                     dispatch(fetchCryptoSuccess(calculatedData));
 
-                    setInterval(async () => {
+                    interval = setInterval(async () => {
                         calculatedData = await processData(response.data)
-                        // console.log('/redux/crypto/actions calculatedData - ', calculatedData)
+                        console.log('/redux/crypto/actions calculatedData - ', calculatedData)
                         dispatch(fetchCryptoSuccess(calculatedData));
                     }, 5000)
                 } else {
@@ -54,4 +56,8 @@ export const fetchCrypto = () => {
             dispatch(fetchCryptoFailure(error))
         }
     }
+}
+
+export const clearCurrentRateInterval = () => {
+    clearInterval(interval)
 }
