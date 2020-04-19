@@ -1,77 +1,59 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
-import Holdings from './holdings';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCrypto } from '../redux/crypto/actions';
+
 import Returns from './returns';
+import Holdings from './holdings';
 import CoinTable from './coinTable';
 
 const Crypto = (props) => {
-    const [data, setData] = useState([]);
-    // const [trans, setTrans] = useState([]);
+    const { isLoading, data, error } = useSelector(state => state)
+    const dispatch = useDispatch();
+
     const [showZeroes, setShowZeroes] = useState(false);
 
     useEffect(() => {
-        const apiCall = async () => {
-            const resp = await axios.get('/api/investment/crypto');
-            console.log('crypto resp.data - ', resp.data)
-            setData(resp.data.sort((a, b) => b.amount - a.amount))
-        }
-        apiCall();
+        dispatch(fetchCrypto());
     }, [])
 
-    const handleDelete = async (id) => {
-        const resp1 = await axios.delete(`/api/investment/crypto/${id}`);
-        console.log(resp1)
-        const resp = await axios.get('/api/investment/crypto')
-        console.log(resp)
-        setData(resp.data);
-    }
-
-    let trans = data;
-    if (!showZeroes) {
-        trans = data.filter(coin => coin.quantity !== 0);
-    }
-    console.log('crypto trans - ', trans)
-    // setTrans(trans);
-
-    if (trans.length === 0)
+    if (isLoading) {
         return (
-            <div>
-                <h5 className="text-center"> No Transactions...</h5>
-                <div className="d-flex justify-content-between" >
-                    <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Transaction</button>
-                    <button className="btn btn-primary" onClick={() => setShowZeroes(!showZeroes)}>{showZeroes ? 'Hide Zeroes' : 'Show Zeroes'}</button>
-                </div>
-            </div>
+            <div>Loading...</div>
         )
+    }
 
-    const headersOnly = trans.map(tran => {
-        return {
-            coin: tran.coin,
-            name: tran.name,
-            exchange: tran.exchange,
-            quantity: tran.quantity,
-            amount: tran.amount,
-            fee: tran.fee,
-            totalAmount: tran.totalAmount,
-            avgRate: tran.avgRate
-        }
-    });
+    if (error && error.code) {
+        return (
+            <div>Error - {error.msg}</div>
+        )
+    }
+
+    const filterData = showZeroes ? data : data.filter(coin => coin.quantity !== 0);
+
+    const coins = filterData.sort((a, b) => b.totalAmount - a.totalAmount)
 
     return (
-        <Fragment>
-            <div className="d-flex justify-content-between" >
-                <Holdings trans={headersOnly} />
-                <Returns trans={headersOnly} />
-            </div>
-            <div>
-                <div className="d-flex justify-content-between" >
-                    <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Transaction</button>
-                    <button className="btn btn-primary" onClick={() => setShowZeroes(!showZeroes)}>{showZeroes ? 'Hide Zeroes' : 'Show Zeroes'}</button>
+        <div>
+            {/* <div className="my-4">
+                    <LineGraph trans={trans} />
+                </div> */}
+            <div className="row my-4">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <Returns />
+                    <div className="d-flex justify-content-between my-4" >
+                        <button className="btn btn-primary" onClick={() => props.history.push('/investments/crypto/add')}>Add Transaction</button>
+                        <button className="btn btn-primary" onClick={() => setShowZeroes(!showZeroes)}>{showZeroes ? 'Hide Zeroes' : 'Show Zeroes'}</button>
+                    </div>
                 </div>
-                {trans.map(coin => <CoinTable key={coin.coin} coin={coin} handleDelete={handleDelete} {...props} />)}
+                <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <Holdings showZeroes={showZeroes} />
+                </div>
             </div>
-        </Fragment>
+            {coins.map(coin =>
+                <CoinTable key={coin.coin} coin={coin} {...props} />
+            )}
+        </div>
     );
 }
 

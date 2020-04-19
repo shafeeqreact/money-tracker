@@ -68,6 +68,13 @@ router.route('/')
                         document.fee = document.transactions
                             .reduce(((accum, curr) => accum + curr.fee), 0);
 
+                        document.buys = document.transactions
+                            .reduce(((accum, curr) =>
+                                (curr.type === 'buy' || curr.type === 'convert-buy') ? (accum + curr.totalAmount) : accum), 0);
+
+                        document.sells = document.transactions
+                            .reduce(((accum, curr) => (curr.type === 'sell' || curr.type === 'convert-sell') ? (accum + curr.totalAmount) : accum), 0);
+
                         document.totalAmount = document.transactions
                             .reduce(((accum, curr) =>
                                 (curr.type === 'buy' || curr.type === 'convert-buy') ? (accum + curr.totalAmount) :
@@ -77,10 +84,18 @@ router.route('/')
 
                         document.avgRate = document.quantity === 0 ? 0 : document.amount / document.quantity;
 
+                        // pure Buy Sells to get the actual investment
+                        document.totalInvestment = document.transactions
+                            .reduce(((accum, curr) =>
+                                (curr.type === 'buy') ? (accum + curr.totalAmount) :
+                                    (curr.type === 'sell') ? (accum - curr.totalAmount) :
+                                        accum),
+                                0);
+
                         return document;
                     })
 
-                // console.log('crypto.js totalAmount - ', result.reduce((accum, curr) => accum + curr.totalAmount, 0))
+                // console.log('crypto.js totalAmount - ', result.reduce((accum, curr) => accum + curr.totalInvestment, 0))
 
                 res.status(200).send(result)
             }
