@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import Input from '../common/input';
+import Input from './common/input';
 
 const SalaryForm = (props) => {
     const [salary, setSalary] = useState({});

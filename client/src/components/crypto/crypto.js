@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCrypto, clearCurrentRateInterval } from '../redux/crypto/actions';
+import { fetchCrypto, clearCurrentRateInterval } from '../../redux/crypto/actions';
 
 import Returns from './returns';
 import Holdings from './holdings';

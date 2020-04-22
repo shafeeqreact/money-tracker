@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { CSSTransition } from 'react-transition-group';
 
-import Loading from '../common/loading';
-import TableRow from '../common/tableRow';
+import Loading from './common/loading';
+import TableRow from './common/tableRow';
 
 import reformatDate from '../utilities/reformatDate';
 

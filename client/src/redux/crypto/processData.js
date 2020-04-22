@@ -64,18 +64,40 @@ export const processData = async (data) => {
         let profitPercentage = totalAmount === 0 ? 100 : ((profit / totalAmount) * 100)
         profitPercentage = Math.round(((profitPercentage) + Number.EPSILON) * 100) / 100;
 
+        // calculate 'currValue' of each transaction in data
+        const transactions = coin.transactions.map(tran => {
+            const currValue = tran.quantity * currentRate;
+            return { ...tran, currValue }
+        })
+
         return {
             coin: coin.coin,
+            name: coin.name,
             quantity,
             totalAmount,
             avgRate,
             currentRate,
             currentValue,
             profit,
-            profitPercentage
+            profitPercentage,
+            transactions
         }
     })
-    const holdings = await Promise.all(promise);
+    const dataWithCurrentValue = await Promise.all(promise);
+
+    const holdings = dataWithCurrentValue.map(coin => {
+        return {
+            coin: coin.coin,
+            name: coin.name,
+            quantity: coin.quantity,
+            totalAmount: coin.totalAmount,
+            avgRate: coin.avgRate,
+            currentRate: coin.currentRate,
+            currentValue: coin.currentValue,
+            profit: coin.profit,
+            profitPercentage: coin.profitPercentage
+        }
+    })
 
     // calculate 'totalInvestment' holdings
     let totalInvestment = holdings.reduce((accum, coin) => coin.quantity === 0 ?
@@ -106,7 +128,7 @@ export const processData = async (data) => {
     // data = data.sort((a, b) => b.totalAmount - a.totalAmount);
 
     return {
-        data,
+        data: dataWithCurrentValue,
         holdings,
         returns
     }

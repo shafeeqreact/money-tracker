@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { toMoney } from '../../utilities/toMoney';
+
 const Holdings = ({ showZeroes }) => {
     const { isLoading, holdings, error } = useSelector(state => state);
 
@@ -38,7 +40,7 @@ const Holdings = ({ showZeroes }) => {
                                     </h5>
                                     <div className="m-0">
                                         <small className={(coin.profit) < 0 ? "text-danger" : "text-success"}>
-                                            {coin.profit.toFixed(2)} $
+                                            {toMoney(coin.profit)} $
                                         </small>
                                     </div>
                                     <div className="m-0">
@@ -50,21 +52,21 @@ const Holdings = ({ showZeroes }) => {
                                 <div className="row">
                                     <div className="col-6 text-right">
                                         <small className="font-weight-light">Curr Rate</small><br />
-                                        <h5>{coin.currentRate.toFixed(2)}</h5>
+                                        <h5>{toMoney(coin.currentRate)}</h5>
                                     </div>
-                                    <div className="col-6 text-right">
+                                    <div className="col-6 text-right pl-0">
                                         <small className="font-weight-light">Curr Value</small><br />
-                                        <h5>{coin.currentValue.toFixed(2)}</h5>
+                                        <h5>{toMoney(coin.currentValue)}</h5>
                                     </div>
                                 </div>
                                 <div className="row mt-1">
                                     <div className="col-6 text-right">
                                         <small className="font-weight-light">Avg Rate</small><br />
-                                        <h5>{coin.avgRate.toFixed(2)}</h5>
+                                        <h5>{toMoney(coin.avgRate)}</h5>
                                     </div>
-                                    <div className="col-6 text-right">
+                                    <div className="col-6 text-right pl-0">
                                         <small className="font-weight-light">Investment</small><br />
-                                        <h5>{coin.totalAmount.toFixed(2)}</h5>
+                                        <h5>{toMoney(coin.totalAmount)}</h5>
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { toMoney } from '../../utilities/toMoney';
+
 const Returns = () => {
     const { isLoading, returns, error } = useSelector(state => state);
     const { totalInvestment, totalCurrentValue, totalProfit, totalProfitPercentage } = returns;
@@ -18,8 +20,6 @@ const Returns = () => {
 
     const textColor = totalProfit < 0 ? "text-danger" : "text-success";
 
-    const toMoney = (value) => parseFloat(value.toFixed(2)).toLocaleString();
-
     return (
         <div className="card shadow my-2">
             <div className="card-header text-center">
@@ -30,7 +30,7 @@ const Returns = () => {
                     <small className="font-weight-light">Percentage</small><br />
                     <h2 className={textColor}>{toMoney(totalProfitPercentage)}%</h2>
                 </div>
-                <div className="card-text d-flex justify-content-around m-3 p-2">
+                <div className="card-text d-flex justify-content-around my-3 mx-1 p-2">
                     <div className="text-center">
                         <small className="font-weight-light">Investment</small><br />
                         <h5>{toMoney(totalInvestment)}</h5>

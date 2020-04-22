@@ -8,8 +8,8 @@ import Navbar from './components/navbar';
 import Home from './components/home';
 import Salary from './components/salary';
 import SalaryForm from './components/salaryForm';
-import Crypto from './components/crypto';
-import CryptoForm from './components/cryptoForm';
+import Crypto from './components/crypto/crypto';
+import CryptoForm from './components/crypto/cryptoForm';
 
 import './App.css';
 

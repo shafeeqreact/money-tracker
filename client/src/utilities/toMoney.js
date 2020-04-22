@@ -1,0 +1,1 @@
+export const toMoney = (value) => parseFloat(value.toFixed(2)).toLocaleString();
